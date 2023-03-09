@@ -1,0 +1,13 @@
+<<<<<<<<<<<<<<<<<  SMAT-Retrieval Description File  >>>>>>>>>>>>>>>>>>>
+************************** Dynamic Data *******************************
+=========================== POME Model ================================
+100                                ! Total Depth [cm]
+10                                 ! Layer Discretization [mm]
+20                                 ! Initial Inflection Depth [cm]
+=========================== USCRN =====================================
+station_in.txt                     ! USCRN Station List File Name
+2017  2017                         ! Starting Year, Ending Year
+1     12                           ! Starting Month, Ending Month
+************************** Static Data ********************************
+TRUE                               ! Vegetation
+1                             	   ! RMSH Soil Surface Roughness [cm]
