@@ -1,4 +1,4 @@
-function estimate_b_parameter(years, months, orbit)
+function estimate_b_parameter(dirs, years, months, orbit)
 % function estimate_b_parameter
 %   
 %   Reads USCRN data and synthetic observations to estimate the b parameter
@@ -27,13 +27,8 @@ function estimate_b_parameter(years, months, orbit)
 %   Version 1.0
 
 %% Directories
-dir_in = './inputs/';
-dir_forward = './results/forward/';
-dir_processed = './data/processed/';
-dir_out = './results/';
-dir_figures = './figures/';
-if ~exist(dir_figures, 'dir')
-    mkdir(dir_figures);
+if ~exist(dirs.figures, 'dir')
+    mkdir(dirs.figures);
 end
 
 %% PARAMETERS
@@ -48,7 +43,7 @@ nOrb = length(orbit);
 nFreq = length(freqOfInterest);
 
 % Read the list of selected stations
-temp = readlines(strcat(dir_in, 'station_in.txt'),"EmptyLineRule","skip");
+temp = readlines(strcat(dirs.in, 'station_in.txt'),"EmptyLineRule","skip");
 nStation = str2double(temp(1));
 station_in = temp(2:end);
 
@@ -67,8 +62,8 @@ bottPOME = [];
 avgPOME = [];
 for iYear = 1 : nYear
     for iOrb = 1 : nOrb
-        true{iYear,iOrb} = readUSCRNNc(dir_processed, station_in, years(iYear), months, orbit{iOrb});
-        forward{iYear,iOrb} = readForwardNc(dir_forward, station_in, years(iYear), months, orbit{iOrb});
+        true{iYear,iOrb} = readUSCRNNc(dirs.processed, station_in, years(iYear), months, orbit{iOrb});
+        forward{iYear,iOrb} = readForwardNc(dirs.forward, station_in, years(iYear), months, orbit{iOrb});
         for iStation = 1 : nStation
             % Quality flag
             idx.flagQcForward{iYear,iOrb,iStation} = forward{iYear,iOrb}.flagQcForward{iStation} == 0;
@@ -147,7 +142,7 @@ b.Rsq.R = 1 - sum((VOD.calc.R - VOD.train.R).^2,1)./sum((VOD.calc.R - mean(VOD.t
 b.Rsq.L = 1 - sum((VOD.calc.L - VOD.train.L).^2,1)./sum((VOD.calc.L - mean(VOD.train.L)).^2,1);
 
 %% WRITE DATA
-filename_table = strcat(dir_in, 'b_parameters.txt');
+filename_table = strcat(dirs.in, 'b_parameters.txt');
 if ~exist(filename_table, 'file')
     b_linReg_H = b.linReg.H(freqOfInterest)';
     b_linReg_V = b.linReg.V(freqOfInterest)';
@@ -164,13 +159,13 @@ if ~exist(filename_table, 'file')
                       'RowNames', cellstr(freqStr));
     writetable(table_out, filename_table, 'Delimiter', '\t', 'WriteRowNames', 1);
 end
-if ~exist(strcat(dir_out, 'b_parameters.mat'), "file")
-    save(strcat(dir_out, 'b_parameters.mat'), "b", "VWC", "VOD", '-mat')
+if ~exist(strcat(dirs.out, 'b_parameters.mat'), "file")
+    save(strcat(dirs.out, 'b_parameters.mat'), "b", "VWC", "VOD", '-mat')
 end
 
 %% PLOT
-if ~exist(strcat(dir_figures, 'b_linearRegression.png'), "file")
-    load(strcat(dir_out, 'b_parameters.mat'));
+if ~exist(strcat(dirs.figures, 'b_linearRegression.png'), "file")
+    load(strcat(dirs.out, 'b_parameters.mat'));
     dataColor = {'r.', 'g.', 'b.', 'c.', 'm.'};  
     lineColor = {'r', 'g', 'b', 'c', 'm'};
     
@@ -234,7 +229,7 @@ if ~exist(strcat(dir_figures, 'b_linearRegression.png'), "file")
     
     xlabel(ht, 'Vegetation Water Content [kg/m^{3}]', 'FontSize', 11); ylabel(ht, 'Vegetation Optical Depth', 'FontSize', 11);
     title(ht, 'Linear Regression Relation Between VOD & VWC');
-    print(hf, strcat(dir_figures, 'b_linearRegression'), '-dpng');
+    print(hf, strcat(dirs.figures, 'b_linearRegression'), '-dpng');
 end
 
 end

@@ -25,9 +25,9 @@ endif
 NAME = SOCRATES-Retrieval
 
 # Basic directories
-PROJDIR = ./
+PROJDIR = ../
+OUT = ../
 CODE = $(PROJDIR)code/
-OUT = $(PROJDIR)
 OBJ = $(CODE)object/
 INC = $(CODE)include/
 SRC = $(CODE)source/
@@ -73,7 +73,7 @@ CFLAGS = -Wall -Wshadow -Wno-deprecated -g $(CINC) -I $(INC) -I $(SRC) -O0 $(ARC
 ##########################  Rules to link smatret  #############################
 
 SOCRATES-retrieval : $(SOOPOBJ) $(RETOBJ)
-	$(CC) $(LFLAGS) -o $(EXENAME) $(SOOPOBJ) $(RETOBJ) $(LIBS)
+	$(CC) $(LFLAGS) -o $(OUT)$(EXENAME) $(SOOPOBJ) $(RETOBJ) $(LIBS)
 
 ####################  Rules to compile objects  ###########################
 
@@ -106,11 +106,11 @@ $(OBJ)42kit.o            : $(42KIT)42kit.c $(INC)socratesret.h
 ########################  Miscellaneous Rules  ############################
 clean :
 ifeq ($(PLATFORM),_WIN32)
-	del .\obj\*.o .\$(EXENAME)
+	del .\obj\*.o .\$(OUT)$(EXENAME)
 else ifeq ($(PLATFORM),_WIN64)
-	del .\obj\*.o .\$(EXENAME)
+	del .\obj\*.o .\$(OUT)$(EXENAME)
 else
-	rm -f $(OBJ)*.o
+	rm -f $(OBJ)*.o .\$(OUT)$(EXENAME)
 endif
 
 

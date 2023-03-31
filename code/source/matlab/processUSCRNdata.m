@@ -1,4 +1,4 @@
-function processUSCRNdata(years, months, orbits)
+function processUSCRNdata(dirs, years, months, orbits)
 % function processUSCRNdata
 %   
 %   Create in-situ dataset (.nc) with USCRN soil moisture data and MODIS 
@@ -37,20 +37,13 @@ FILLVALUE = -9999;
 
 dataColor = {'r.', 'g.', 'b.', 'c.', 'm.'};
 
-% Directories
-dir_in = './inputs/';
-dir_geometry = './data/geometry/';
-dir_USCRN = './data/USCRN/';
-dir_processed = './data/processed/';
-dir_NDVI = './data/MODIS-NDVI/';
-
 % Read the list of selected stations
-temp = readlines(strcat(dir_in, 'station_in.txt'),"EmptyLineRule","skip");
+temp = readlines(strcat(dirs.in, 'station_in.txt'),"EmptyLineRule","skip");
 nStation = str2double(temp(1));
 station_in = temp(2:end);
 
 % Read data of the selected stations from the station table
-station_info = readcell(strcat(dir_in, 'station_list.xlsx'), 'NumHeaderLines', 1);
+station_info = readcell(strcat(dirs.in, 'station_list.xlsx'), 'NumHeaderLines', 1);
 station_name = station_info(:,1);
 [~, idx_station_in] = ismember(station_in, station_name);
 station_vegType = lower(station_info(idx_station_in,2));
@@ -85,7 +78,7 @@ nVegVar = nVar.grass;
 for iStation = 1 : nStation
     % Read pre-processed MODIS NDVI data for each station
     filename_NDVI = strcat('MODIS_NDVI_', station_in(iStation), '_interp.txt');
-    fullpath_NDVI = strcat(dir_NDVI, filename_NDVI);
+    fullpath_NDVI = strcat(dirs.NDVI, filename_NDVI);
     temp = readmatrix(fullpath_NDVI);
     yyyy{iStation} = temp(:,1);
     doy{iStation} = temp(:,2);
@@ -120,9 +113,9 @@ for iYear = 1 : nYear
     for iOrb = 1 : nOrb
         prev_year_str = num2str(years(iYear) - 1);
         curr_year_str = num2str(years(iYear));
-        dir_in1 = strcat(dir_USCRN, prev_year_str, '/');
-        dir_in2 = strcat(dir_USCRN, curr_year_str, '/');
-        dir_out = strcat(dir_processed, curr_year_str, '/');
+        dir_in1 = strcat(dirs.USCRN, prev_year_str, '/');
+        dir_in2 = strcat(dirs.USCRN, curr_year_str, '/');
+        dir_out = strcat(dirs.processed, curr_year_str, '/');
         % Create directories if not exist
         if(~exist(dir_out, 'dir'))
             mkdir(dir_out);
@@ -200,7 +193,7 @@ for iYear = 1 : nYear
                 nSample = size(utcDatetime{iStation}, 1);
                 
                 % Load incidence angle data
-                load(strcat(dir_geometry,filename_inc(iStation)));
+                load(strcat(dirs.geometry,filename_inc(iStation)));
     
                 % Read vegetation data
                 idxYear = year(ANC.NDVIdate{iStation}) == years(iYear);

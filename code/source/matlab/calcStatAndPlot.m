@@ -1,4 +1,4 @@
-function calcStatAndPlot(year, months, orbit, polRx, freq, period, window, stddev, flagVeg, flagPlot)
+function calcStatAndPlot(dirs, year, months, orbit, polRx, freq, period, window, stddev, flagVeg, flagPlot)
 % function calcStatAndPlot
 %
 %   Calculates, plots, and saves error statistics of retrieved data for a
@@ -23,18 +23,14 @@ function calcStatAndPlot(year, months, orbit, polRx, freq, period, window, stdde
 %     
 %   You should have received a copy of the GNU General Public License
 %   along with this program.  If not, see <https://www.gnu.org/licenses/>.
-%
+%processed
 %   Version 1.0
 
 % Directories
-dir_in = './inputs/';
-dir_processed = './data/processed/';
-dir_forward = './results/forward/';
-dir_inverse = './results/inverse/';
-dir_figures = './figures/inverse/';
+dir_figures_inv = strcat(dirs.figures, 'inverse/');
 dir_ret = sprintf('p%dw%df%s%sstd%d%s/', period, window, strrep(num2str(freq), ' ', ''), polRx, stddev*100, orbit);
-dir_out_figure = strcat(dir_figures, dir_ret);
-dir_out_stat = strcat(dir_inverse, dir_ret);
+dir_out_figure = strcat(dir_figures_inv, dir_ret);
+dir_out_stat = strcat(dirs.inverse, dir_ret);
 if(~exist(dir_out_figure, 'dir'))
     mkdir(dir_out_figure);
 end
@@ -43,13 +39,13 @@ if(~exist(dir_out_stat, 'dir'))
 end
 
 % Read the list of selected stations
-temp = readlines(strcat(dir_in, 'station_in.txt'),"EmptyLineRule","skip");
+temp = readlines(strcat(dirs.in, 'station_in.txt'),"EmptyLineRule","skip");
 nStation = str2double(temp(1));
 station_in = temp(2:end);
 station_name_space = strrep(station_in,'_', ' ');
 
 % Read data of the selected stations from the station table
-station_info = readcell(strcat(dir_in, 'station_list.xlsx'), 'NumHeaderLines', 1);
+station_info = readcell(strcat(dirs.in, 'station_list.xlsx'), 'NumHeaderLines', 1);
 station_name_list = station_info(:,1);
 [~, idx_station_in] = ismember(station_in, station_name_list);
 station_soilDepth = str2num(cell2mat(station_info(idx_station_in,6)));
@@ -66,9 +62,9 @@ str_freq = strcat(num2str(freq_MHz(freq)), 'MHz');
     
 % Read NetCDF
 fprintf("Computing statistics ... ");
-true = readUSCRNNc(dir_processed, station_in, year, months, orbit);
-forward = readForwardNc(dir_forward, station_in, year, months, orbit);
-ret = readRetrievalNc([dir_inverse, dir_ret], station_in, year, months, orbit, period, window, stddev, polRx, flagVeg);
+true = readUSCRNNc(dirs.processed, station_in, year, months, orbit);
+forward = readForwardNc(dirs.forward, station_in, year, months, orbit);
+ret = readRetrievalNc([dirs.inverse, dir_ret], station_in, year, months, orbit, period, window, stddev, polRx, flagVeg);
 
 % Post-processing 
 for iStation = 1 : nStation

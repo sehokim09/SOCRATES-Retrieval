@@ -1,4 +1,4 @@
-function analyzeRetrieval(years, months, orbits, freq, polRx, stddev, period, window)
+function analyzeRetrieval(dirs, years, months, orbits, freq, polRx, stddev, period, window)
 % function analyzeRetrieval
 %
 %   Calculates, plots, and saves error statistics of retrieved data by
@@ -40,7 +40,7 @@ function analyzeRetrieval(years, months, orbits, freq, polRx, stddev, period, wi
                 for iWindow = 1 : nWindow
                     for iStd = 1 : nStd
                         for iFreq = 1 : nFreq
-                            calcStatAndPlot(years(iYear), months, orbits{iOrb}, polRx{iPol}, freq{iFreq}, period, window(iWindow), stddev(iStd), flagVeg, flagPlot);
+                            calcStatAndPlot(dirs, years(iYear), months, orbits{iOrb}, polRx{iPol}, freq{iFreq}, period, window(iWindow), stddev(iStd), flagVeg, flagPlot);
                         end
                     end
                 end

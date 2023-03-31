@@ -1,4 +1,4 @@
-function runForwardModel(years, months, orbits)
+function runForwardModel(dirs, years, months, orbits)
 % function runForwardModelMC
 %   
 %   Updates input files for SOCRATES-Retrieval and run it as a forward mode
@@ -28,9 +28,8 @@ function runForwardModel(years, months, orbits)
 %   Version 1.0
 
 % Directories
-dir_in = './inputs/';
-dir_inp_main = strcat(dir_in, 'Inp_Main.txt');
-dir_inp_fixed = strcat(dir_in, 'Inp_Fixed.txt');
+dir_inp_main = strcat(dirs.in, 'Inp_Main.txt');
+dir_inp_fixed = strcat(dirs.in, 'Inp_Fixed.txt');
 
 for iOrb = 1 : length(orbits)
     fprintf('Starting synthetic observation generation ... @ %s orbit\n', orbits{iOrb});
@@ -43,7 +42,7 @@ for iOrb = 1 : length(orbits)
     str = sprintf('%s                           ! (For retrieval only) Orbit type (ISS, SSO)\n', orbits{iOrb});
     overwriteLineInFile(dir_inp_fixed,11,str);
     % Run simulation
-    system('SOCRATES-Retrieval f');
+    system(['cd ', dirs.exe, '; SOCRATES-Retrieval f']);
 end
 
 end

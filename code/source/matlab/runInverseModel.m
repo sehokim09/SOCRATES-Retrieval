@@ -1,4 +1,4 @@
-function runInverseModel(np, years, months, orbits, freq, polRx, stddev, period, window)
+function runInverseModel(dirs, np, years, months, orbits, freq, polRx, stddev, period, window)
 % function runInverseModel
 %   
 %   Updates input files for SOCRATES-Retrieval and run it as a inverse mode
@@ -43,14 +43,12 @@ nFreq = length(freq);
 nWindow = length(window);
 
 %% GET DIRECTORIES
-dir_in = './inputs/';
-dir_out = './results/inverse/';
-dir_inp_main = strcat(dir_in, 'Inp_Main.txt');
-dir_inp_fixed = strcat(dir_in, 'Inp_Fixed.txt');
-dir_inp_fixed_temp = strcat(dir_in, 'Inp_Fixed_temp.txt');
-dir_inp_retrieval = strcat(dir_in, 'Inp_Retrieval.txt');
-dir_inp_station = strcat(dir_in, 'station_in.txt');
-dir_inp_station_temp = strcat(dir_in, 'station_in_temp.txt');
+dir_inp_main = strcat(dirs.in, 'Inp_Main.txt');
+dir_inp_fixed = strcat(dirs.in, 'Inp_Fixed.txt');
+dir_inp_fixed_temp = strcat(dirs.in, 'Inp_Fixed_temp.txt');
+dir_inp_retrieval = strcat(dirs.in, 'Inp_Retrieval.txt');
+dir_inp_station = strcat(dirs.in, 'station_in.txt');
+dir_inp_station_temp = strcat(dirs.in, 'station_in_temp.txt');
 
 % Read the list of selected stations
 temp = readlines(dir_inp_station,"EmptyLineRule","skip");
@@ -82,9 +80,9 @@ for iFreq = 1 :nFreq
                 for iDev = 1 : nDev
                     for iWindow = 1 : nWindow
                         folder_out = sprintf('p%dw%df%s%sstd%d%s', period, window(iWindow), strrep(num2str(freq{iFreq}), ' ', ''), polRx{iPol}, stddev(iDev)*100, orbits{iOrb});
-                        if ~exist(strcat(dir_out, folder_out), "dir")
+                        if ~exist(strcat(dirs.inverse, folder_out), "dir")
                             % Make output directory
-                            mkdir([dir_out, folder_out])
+                            mkdir([dirs.inverse, folder_out])
                         end
                         % Update Inp_Retrieval.txt
                         str = sprintf('%s                             ! Receive Polarization(R,L,X,Y,RL,RX,RY,LX,LY,XY)\n', polRx{iPol});
@@ -109,18 +107,18 @@ for iFreq = 1 :nFreq
                         
                         for iStation = 1 : nStation
                             filename_ret = sprintf('USCRN_%dM%dM%d_p%dw%d_%s_std%d_%s_ret.nc', years(iYear), months(1), months(2), period, window(iWindow), station_in{iStation}, stddev(iDev)*100, orbits{iOrb});
-                            fullpath = strcat(dir_out, folder_out, '/', filename_ret);
+                            fullpath = strcat(dirs.inverse, folder_out, '/', filename_ret);
                             fprintf('Starting simulated retrieval %s ... \n', fullpath);
                             if exist(fullpath, "file")
                                 fprintf('exist.\n');
                             else
-                                % Update station_list.txt
+                                % Update station_in.txt
                                 str = sprintf('%s\n', station_in{iStation});
                                 overwriteLineInFile(dir_inp_station,2,str);
 
                                 % Run simulation
                                 fprintf('run SOCRATES-Retrieval.\n');
-                                status = system(['mpirun -np ', num2str(np), ' SOCRATES-Retrieval i ', folder_out]);
+                                status = system(['cd ', dirs.exe, '; mpirun -np ', num2str(np), ' SOCRATES-Retrieval i ', folder_out]);
                                 if status == 0
                                     fprintf('%s complete.\n', fullpath);
                                 else

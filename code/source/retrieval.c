@@ -2734,23 +2734,23 @@ void RetrievalNetCDF(void)
         printf(">> Number of Retrieved Soil Layers is %ld\n", NLayer);
         printf(">> Ground Multi-layered Structure: POME model\n");
         printf(">> Start Retrieval.\n");
-    }
-
-    stationFile=FileOpen(InPath, Nc->filename,"r");
-    
+    }	
+	
+	stationFile = FileOpen(InPath, Nc->filename, "r");
+	
 	for(iYear=Nc->startYear; iYear<Nc->endYear+1; iYear++){
         fscanf(stationFile,"%ld %[\n]",&nStation, &newline);
 		for(iStation=0; iStation<nStation; iStation++){
 			// Read station name
 			fscanf(stationFile, "%s %[\n]", stationName, &newline);
 
-            // Read USCRN NetCDF
+	        // Read USCRN NetCDF
 			readNcUSCRN(iYear, stationName);
-
-            // Read Forward NetCDF
+	
+	        // Read Forward NetCDF
             readNcForward(iYear, stationName);
 
-            Nc->retDim = floor(Nc->sampleDim / period);   
+	        Nc->retDim = floor(Nc->sampleDim / period);   
             Nc->nCycle = floor(Nc->retDim / numtasks);
 
             Nc->soopDim = NSoOp;

@@ -28,21 +28,11 @@
 %   Version 1.0
 
 clear all; close all;
-addpath code/source/matlab/
+addpath source/matlab/
+dir_top = '../';
 
 % Create necessary directories
-dir_obj = './code/object';
-dir_forward = './results/forward';
-dir_inverse = './results/inverse';
-if ~exist(dir_obj, 'dir')
-    mkdir(dir_obj);
-end
-if ~exist(dir_forward, 'dir')
-    mkdir(dir_forward);
-end
-if ~exist(dir_inverse, 'dir')
-    mkdir(dir_inverse);
-end
+dirs = setDirectories(dir_top);
 
 % Compile SOCRATES-Retrieval
 system('make clean; make');
@@ -65,7 +55,7 @@ months = [1, 12];
 orbits = {'ISS'};
 
 % Start processing
-processUSCRNdata(years, months, orbits);
+processUSCRNdata(dirs, years, months, orbits);
 
 %% Step 2-1: Generate synthetic observations for all freq/pol
 % It will generate hourly synthetic reflectivities on bare soil &
@@ -73,13 +63,13 @@ processUSCRNdata(years, months, orbits);
 % NOTE: This may take several hours and will overwrite any existing
 % files. Use with caution.
 
-runForwardModel(years, months, orbits);
+runForwardModel(dirs, years, months, orbits);
 
 %% Step 2-2: Plot synthetic observations
-plotSynObs(years, months, orbits);
+plotSynObs(dirs, years, months, orbits);
 
 %% Step 3: Estimate the b parameter for all freq/pol
-estimate_b_parameter(years, months, orbits);
+estimate_b_parameter(dirs, years, months, orbits);
 
 %% Step 4-1: Run retrieval simulation
 % Set SoOp-R system parameters for Monte Carlo simulations using the
@@ -103,7 +93,7 @@ window = 12;
 np = 24;
 
 % Run Monte Carlo simulations for different SoOp-R parameters
-runInverseModel(np, years, months, orbits, freq, polRx, stddev, period, window)
+runInverseModel(dirs, np, years, months, orbits, freq, polRx, stddev, period, window)
 
 %% Step 4-2: Analyze retrieval results
-analyzeRetrieval(years, months, orbits, freq, polRx, stddev, period, window)
+analyzeRetrieval(dirs, years, months, orbits, freq, polRx, stddev, period, window)

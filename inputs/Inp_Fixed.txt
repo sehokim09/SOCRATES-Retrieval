@@ -14,17 +14,17 @@ ISS                           ! (For retrieval only) Orbit type (ISS, SSO)
 ----------------------------------------- Tx 1 -------------------------------------
 137                           ! Transmitter Frequency [MHz]
 750                           ! Transmitter Altitude [km]
-R                             ! Transmitter Polarization (R,L,X,Y)
+R                            ! Transmitter Polarization (R,L,X,Y)
 ----------------------------------------- Tx 2 -------------------------------------
 255                           ! Transmitter Frequency [MHz]
-35786                         ! Transmitter Altitude [km]
-R                             ! Transmitter Polarization (R,L,X,Y)
+35786                           ! Transmitter Altitude [km]
+R                            ! Transmitter Polarization (R,L,X,Y)
 ----------------------------------------- Tx 3 -------------------------------------
 370                           ! Transmitter Frequency [MHz]
-35786                         ! Transmitter Altitude [km]
-R                             ! Transmitter Polarization (R,L,X,Y)
+35786                           ! Transmitter Altitude [km]
+R                            ! Transmitter Polarization (R,L,X,Y)
 ----------------------------------------- Tx 4 -------------------------------------
-1575.42                       ! Transmitter Frequency [MHz]
-20180                         ! Transmitter Altitude [km]
-R                             ! Transmitter Polarization (R,L,X,Y)
+1575.42                           ! Transmitter Frequency [MHz]
+20180                           ! Transmitter Altitude [km]
+R                            ! Transmitter Polarization (R,L,X,Y)
 

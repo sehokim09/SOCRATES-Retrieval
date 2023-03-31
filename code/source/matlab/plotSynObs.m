@@ -1,4 +1,4 @@
-function plotSynObs(years, months, orbits)
+function plotSynObs(dirs, years, months, orbits)
 % function plotSynObs
 %   
 %   Reads and plots USCRN data and synthetic observations.
@@ -25,22 +25,19 @@ function plotSynObs(years, months, orbits)
 %   Version 1.0
 
 % Directories
-dir_in = './inputs/';
-dir_processed = './data/processed/';
-dir_forward = './results/forward/';
-dir_figures = './figures/forward/';
-if ~exist(dir_figures, 'dir')
-    mkdir(dir_figures);
+dir_figures_forward = strcat(dirs.figures, 'forward/');
+if ~exist(dir_figures_forward, 'dir')
+    mkdir(dir_figures_forward);
 end
 % Read the list of selected stations
-temp = readlines(strcat(dir_in, 'station_in.txt'),"EmptyLineRule","skip");
+temp = readlines(strcat(dirs.in, 'station_in.txt'),"EmptyLineRule","skip");
 nStation = str2double(temp(1));
 station_in = temp(2:end);
 station_in = station_in(1:nStation);
 station_name_space = strrep(station_in,'_', ' ');
 
 % Read data of the selected stations from the station table
-station_info = readcell(strcat(dir_in, 'station_list.xlsx'), 'NumHeaderLines', 1);
+station_info = readcell(strcat(dirs.in, 'station_list.xlsx'), 'NumHeaderLines', 1);
 station_name_list = station_info(:,1);
 [~, idx_station_in] = ismember(station_in, station_name_list);
 station_soilDepth = str2num(cell2mat(station_info(idx_station_in,6)));
@@ -57,11 +54,11 @@ nOrb = length(orbits);
 % Read data
 pol = {'RHCP','LHCP','X-pol','Y-pol'};
 dataColor = {'r.', 'g.', 'b.', 'c.', 'm.'};  
-fprintf("Saving plots in %s ... ", dir_figures);
+fprintf("Saving plots in %s ... ", dir_figures_forward);
 for iYear = 1 : nYear
     for iOrb = 1 : nOrb
-        true = readUSCRNNc(dir_processed, station_in, years(iYear), months, orbits{iOrb});
-        forward = readForwardNc(dir_forward, station_in, years(iYear), months, orbits{iOrb});
+        true = readUSCRNNc(dirs.processed, station_in, years(iYear), months, orbits{iOrb});
+        forward = readForwardNc(dirs.forward, station_in, years(iYear), months, orbits{iOrb});
         for iStation = 1 : nStation
             soilMoistPOMEref_insituDepth{iStation} = forward.soilMoistPOME{iStation}(:,idx_layer);
             refl_ref{iStation,1} = forward.refl_V_R{iStation};
@@ -105,7 +102,7 @@ for iYear = 1 : nYear
             title('Incidence Angles')
             
             sgtitle(sprintf('%s, %d', station_name_space{iStation}, years(iYear)));
-            print(hf, sprintf('%sUSCRN_%dM%dM%d_%s_%s_TS', dir_figures, years(iYear), months(1), months(2), orbits{iOrb}, station_in{iStation}), '-dpng');
+            print(hf, sprintf('%sUSCRN_%dM%dM%d_%s_%s_TS', dir_figures_forward, years(iYear), months(1), months(2), orbits{iOrb}, station_in{iStation}), '-dpng');
         end
     end
 end
