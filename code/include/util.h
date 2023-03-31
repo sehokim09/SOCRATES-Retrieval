@@ -20,11 +20,6 @@
 
 long decodeStr(char *s);
 void readLineParsor(FILE *infile, double *data, const char *delimiter);
-FILE *FileOpen(const char *Path, const char *File, const char *CtrlCode);
-struct RandomProcessType *CreateRandomProcess(long Seed);
-void DestroyRandomProcess(struct RandomProcessType *RP);
-double UniformRandom(struct RandomProcessType *RP);
-double GaussianRandom(struct RandomProcessType *RP);
 long UniformRandomDiscrete(struct RandomProcessType *RP, int lb, int ub);
 int msta1(double x,int mp);
 int msta2(double x,int n,int mp);
@@ -43,10 +38,6 @@ void M4xV4_complex(double complex M[4][4], double complex V[4], double complex W
 void M2xV2_complex(double complex M[2][2], double complex V[2], double complex W[2]);
 void MTxV_complex (double M[3][3], double V[3], double complex W[3]);
 void M2xM2_complex(double complex A[2][2], double complex B[2][2], double complex C[2][2]);
-void MxM(double A[3][3], double B[3][3], double C[3][3]);
-void MxV (double M[3][3], double V[3], double W[3]);
-double CopyUnitV(double V[3], double W[3]);
-double signum(double x);
 void RotX(double th, double R[3][3]);
 void RotY(double th, double R[3][3]);
 void RotZ(double th, double R[3][3]);

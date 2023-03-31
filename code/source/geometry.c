@@ -24,14 +24,8 @@ void updateBistaticFixed(struct FixedObsType *F)
 	Bistatic->Wavelength = F->Wavelength; // [m]
 	Bistatic->Wavenumber = TwoPi / Bistatic->Wavelength;
 	Bistatic->th = F->thTx;
-	Bistatic->EIRP_Tx = F->EIRP_Tx; // Transmitter EIRP [dB]
-	Bistatic->EIRP_Tx_Lin = pow(10, F->EIRP_Tx/10);
 	Bistatic->G_Rx = F->G_Rx; // Receive Antenna Gain [dB]
 	Bistatic->G_Rx_Lin= pow(10, F->G_Rx/10);
-	Bistatic->t_coh = F->t_coh;
-	Bistatic->Bandwidth = F->Bandwidth;
-	Bistatic->Tn = F->Tn;
-	Bistatic->N_inc = F->N_inc;
 }
 
 /* Calculates the Fresnel zones for the specular reflection */

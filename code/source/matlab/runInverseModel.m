@@ -47,6 +47,7 @@ dir_in = './inputs/';
 dir_out = './results/inverse/';
 dir_inp_main = strcat(dir_in, 'Inp_Main.txt');
 dir_inp_fixed = strcat(dir_in, 'Inp_Fixed.txt');
+dir_inp_fixed_temp = strcat(dir_in, 'Inp_Fixed_temp.txt');
 dir_inp_retrieval = strcat(dir_in, 'Inp_Retrieval.txt');
 dir_inp_station = strcat(dir_in, 'station_in.txt');
 dir_inp_station_temp = strcat(dir_in, 'station_in_temp.txt');
@@ -56,13 +57,19 @@ temp = readlines(dir_inp_station,"EmptyLineRule","skip");
 nStation = str2double(temp(1));
 station_in = temp(2:end);
 
-% Create temporary station input file
-fileID = fopen(dir_inp_station_temp, 'w');
+% Backup station input file
+copyfile(dir_inp_station, dir_inp_station_temp, 'f')
+% Backup Inp_Fixed.txt
+copyfile(dir_inp_fixed, dir_inp_fixed_temp, 'f')
+
+% Modify station input file
+fileID = fopen(dir_inp_station, 'w');
 fprintf(fileID, '1\n');
+fclose(fileID);
 
 line_inp_main = [9, 10];
 line_inp_retrieval = [2, 3, 4];
-line_inp_fixed = [19, 25, 31, 37];
+line_inp_fixed = [15, 19, 23, 27];
 for iFreq = 1 :nFreq
     for iYear = 1 : nYear
         % Update Inp_Main.txt
@@ -77,7 +84,7 @@ for iFreq = 1 :nFreq
                         folder_out = sprintf('p%dw%df%s%sstd%d%s', period, window(iWindow), strrep(num2str(freq{iFreq}), ' ', ''), polRx{iPol}, stddev(iDev)*100, orbits{iOrb});
                         if ~exist(strcat(dir_out, folder_out), "dir")
                             % Make output directory
-                            system(['mkdir ', dir_out, folder_out])
+                            mkdir([dir_out, folder_out])
                         end
                         % Update Inp_Retrieval.txt
                         str = sprintf('%s                             ! Receive Polarization(R,L,X,Y,RL,RX,RY,LX,LY,XY)\n', polRx{iPol});
@@ -90,16 +97,14 @@ for iFreq = 1 :nFreq
                         str = sprintf('%s                           ! (For retrieval only) Orbit type (ISS, SSO)\n', orbits{iOrb});
                         overwriteLineInFile(dir_inp_fixed,11,str);
                         str = sprintf('%d                             ! Number of Transmitters\n', length(freq{iFreq}));
-                        overwriteLineInFile(dir_inp_fixed,17,str);
+                        overwriteLineInFile(dir_inp_fixed,13,str);
                         for iLine = 1 : length(freq{iFreq})
                             str = sprintf('%s                           ! Transmitter Frequency [MHz]\n', f_MHz{freq{iFreq}(iLine)});
                             overwriteLineInFile(dir_inp_fixed,line_inp_fixed(iLine),str);
                             str = sprintf('%s                           ! Transmitter Altitude [km]\n', alt_km{freq{iFreq}(iLine)});
                             overwriteLineInFile(dir_inp_fixed,line_inp_fixed(iLine)+1,str);
-                            str = sprintf('%s    %s                        ! Transmitter EIRP [dB], Polarization (R,L,X,Y)\n', EIRP{freq{iFreq}(iLine)}, polRxForward{freq{iFreq}(iLine)});
+                            str = sprintf('%s                            ! Transmitter Polarization (R,L,X,Y)\n', polRxForward{freq{iFreq}(iLine)});
                             overwriteLineInFile(dir_inp_fixed,line_inp_fixed(iLine)+2,str);
-                            str = sprintf('%s                            ! Bandwidth of channel [kHz]\n', bw_kHz{freq{iFreq}(iLine)});
-                            overwriteLineInFile(dir_inp_fixed,line_inp_fixed(iLine)+4,str);
                         end
                         
                         for iStation = 1 : nStation
@@ -111,15 +116,15 @@ for iFreq = 1 :nFreq
                             else
                                 % Update station_list.txt
                                 str = sprintf('%s\n', station_in{iStation});
-                                overwriteLineInFile(dir_inp_station_temp,2,str);
+                                overwriteLineInFile(dir_inp_station,2,str);
 
                                 % Run simulation
-                                fprintf('run SMAT-retrieval.\n');
-                                status = system(['mpirun -np ', num2str(np), ' SMAT-retrieval i ', folder_out]);
+                                fprintf('run SOCRATES-Retrieval.\n');
+                                status = system(['mpirun -np ', num2str(np), ' SOCRATES-Retrieval i ', folder_out]);
                                 if status == 0
                                     fprintf('%s complete.\n', fullpath);
                                 else
-                                    fprintf('Error: SMAT-retrieval %s\n', fullpath);
+                                    fprintf('Error: SOCRATES-Retrieval %s\n', fullpath);
                                     break;
                                 end
                             end
@@ -131,7 +136,12 @@ for iFreq = 1 :nFreq
     end
 end
 
-% Delete the temporary file
-delete ./inputs/station_in_temp.txt
+% Restore station input file
+copyfile(dir_inp_station_temp, dir_inp_station, 'f')
+% Restore Inp_Fixed.txt
+copyfile(dir_inp_fixed_temp, dir_inp_fixed, 'f')
+% Delete the temporary files
+delete(dir_inp_station_temp)
+delete(dir_inp_fixed_temp)
 
 end

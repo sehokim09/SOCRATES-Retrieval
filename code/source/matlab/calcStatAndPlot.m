@@ -4,7 +4,7 @@ function calcStatAndPlot(year, months, orbit, polRx, freq, period, window, stdde
 %   Calculates, plots, and saves error statistics of retrieved data for a
 %   given system parameters.
 %
-%   See also main, plotRetrieval, readUSCRNNc, readForwardNc,
+%   See also main, analyzeRetrieval, readUSCRNNc, readForwardNc,
 %   readRetrievalNc.
 %
 %   Copyright (C) 2023 Seho Kim
@@ -135,6 +135,12 @@ RMSE_top_mean_insituDepth = RMSE_top_mean(idx_layer);
 fprintf('done.\n');
 %% OUTPUTS
 dateStr = sprintf('%dM%dM%d', year, months(1), months(2));
+if nStation < 3
+    colDivisor = nStation/3;
+else
+    colDivisor = 1;
+end
+rowDivisor = ceil(nStation/3)/3;
 if flagPlot
     dataColor = {'r.', 'g.', 'b.', 'c.', 'm.'};  
     fprintf('Saving plots in %s ... ', dir_out_figure);
@@ -144,7 +150,7 @@ if flagPlot
         soilMoist_max = max([soilMoist_max, max(max([soilMoistPOMEest_insituDepth{iStation}, soilMoistPOMEref_insituDepth{iStation}]))]);
     end
     xVSM = 0:0.001:soilMoist_max;    
-    hf = figure('visible', 'off', 'Position', [0 0 2500 1250]);
+    hf = figure('visible', 'off', 'Position', [0 0 2500*colDivisor 1250*rowDivisor]);
     ht = tiledlayout('flow', 'TileSpacing', 'Compact');
     for iStation = 1 : nStation
         nexttile; hold on;
@@ -169,7 +175,7 @@ if flagPlot
         VWC_max = max([VWC_max, max(max([VWCrefmodelSum{iStation}, VWCest{iStation}]))]);
     end
     xVWC = 0:0.01:VWC_max;    
-    hf = figure('visible', 'off', 'Position', [0 0 1600 800]);
+    hf = figure('visible', 'off', 'Position', [0 0 2500*colDivisor 1250*rowDivisor]);
     ht = tiledlayout('flow', 'TileSpacing', 'Compact');
     for iStation = 1 : nStation
         nexttile; hold on;
@@ -237,11 +243,11 @@ if flagPlot
         title('Vegetation Water Content')
         
         sgtitle(strcat(station_name_space{iStation}, ', ', year));
-        print(hf, sprintf('%sUSCRN_%s_%s_%s_TS', dir_out_figure, dateStr, orbit, station_in{iStation}), '-dpng');
+        print(hf, sprintf('%sUSCRN_%s_%s_%s_TS_ret', dir_out_figure, dateStr, orbit, station_in{iStation}), '-dpng');
     end
     
     % POME vs Retrieval (entire column)
-    hf = figure('visible', 'off', 'Position', [0 0 1600 800]);
+    hf = figure('visible', 'off', 'Position', [0 0 2500*colDivisor 1250*rowDivisor]);
     ht = tiledlayout('flow', 'TileSpacing', 'Compact');
     for iStation = 1 : nStation
         nexttile; hold on;

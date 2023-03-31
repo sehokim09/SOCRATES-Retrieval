@@ -36,6 +36,7 @@
 #include "util.h"
 #include "mpi.h"
 #include "netcdf.h"
+#include "sys/stat.h"
 
 EXTERN char InPath[30];
 EXTERN char ForwardPath[40];
@@ -111,7 +112,7 @@ void calcSpecularTermSimple(struct FixedObsType *F, double VWC);
 
 // init.c
 void Welcome(void);
-void InitSMAT_ret(int argc,char **argv);
+void InitSOCRATES_Ret(int argc,char **argv);
 
 // retrieval.c
 void writeNcRet(void);
@@ -125,6 +126,18 @@ void ObsFixedNetCDF(void);
 void InitRetrieval(void);
 void InitSA(void);
 void RetrievalNetCDF(void);
+
+// 42kit.c
+FILE *FileOpen(const char *Path, const char *File, const char *CtrlCode);
+struct RandomProcessType *CreateRandomProcess(long Seed);
+void DestroyRandomProcess(struct RandomProcessType *RP);
+double UniformRandom(struct RandomProcessType *RP);
+double GaussianRandom(struct RandomProcessType *RP);
+void MxM(double A[3][3], double B[3][3], double C[3][3]);
+void MxV (double M[3][3], double V[3], double W[3]);
+double CopyUnitV(double V[3], double W[3]);
+double signum(double x);
+
 /////////////////////////////////////////////
 
 #endif /* __SMATRET_H__ */

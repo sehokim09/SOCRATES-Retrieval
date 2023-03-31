@@ -84,7 +84,7 @@ nVegVar = nVar.grass;
 %% Compute VWC based on dynamic vegetation model
 for iStation = 1 : nStation
     % Read pre-processed MODIS NDVI data for each station
-    filename_NDVI = strcat('MODIS_NDVI_', station_name{iStation}, '_interp.txt');
+    filename_NDVI = strcat('MODIS_NDVI_', station_in(iStation), '_interp.txt');
     fullpath_NDVI = strcat(dir_NDVI, filename_NDVI);
     temp = readmatrix(fullpath_NDVI);
     yyyy{iStation} = temp(:,1);
@@ -134,11 +134,11 @@ for iYear = 1 : nYear
             mkdir(dir_in2);
         end
         % Incidence angle data
-        filename_inc = strcat('inc_', station_name, '_', orbits{iOrb}, '.mat');
+        filename_inc = strcat('inc_', station_in, '_', orbits{iOrb}, '.mat');
         for iStation = 1 : nStation
-            filename_in1 = strcat('CRNH0203-', prev_year_str, '-', station_name{iStation}, '.txt');
-            filename_in2 = strcat('CRNH0203-', curr_year_str, '-', station_name{iStation}, '.txt');
-            filename_out = sprintf('USCRN_hourly_%sM%dM%d_%s_%s', curr_year_str, startMonth, endMonth, orbits{iOrb}, station_name{iStation});
+            filename_in1 = strcat('CRNH0203-', prev_year_str, '-', station_in(iStation), '.txt');
+            filename_in2 = strcat('CRNH0203-', curr_year_str, '-', station_in(iStation), '.txt');
+            filename_out = sprintf('USCRN_hourly_%sM%dM%d_%s_%s', curr_year_str, startMonth, endMonth, orbits{iOrb}, station_in(iStation));
             
             fullpath_out = strcat(dir_out, filename_out, '.nc');
             
@@ -200,7 +200,7 @@ for iYear = 1 : nYear
                 nSample = size(utcDatetime{iStation}, 1);
                 
                 % Load incidence angle data
-                load(strcat(dir_geometry,filename_inc{iStation}));
+                load(strcat(dir_geometry,filename_inc(iStation)));
     
                 % Read vegetation data
                 idxYear = year(ANC.NDVIdate{iStation}) == years(iYear);

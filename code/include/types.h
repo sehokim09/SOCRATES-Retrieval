@@ -434,12 +434,6 @@ struct FixedObsType{
 	char polTx; // Transmit Antenna Polarization
 	double G_Rx; // [dB]
 	double h; // Effective Roughness Parameter h = (2*RMSH*k0)^2, k0 = TwoPi/Wavelength[cm] in [cm]
-	double t_coh; // Coherent Integration Time [sec]
-	double Bandwidth; // Noise bandwidth of the front-end [Hz]
-	double Tn; // Noise temerature [K]
-	double sres_req; // Spatial Resolution Requirement [m]
-	double t_inc; // Max Incoherent Integration Time [sec] - set by sres_req
-	long N_inc; // Number of Independent Samples - floor(t_inc/t_coh)
 
 	// Bistatic Geometry
 	double rTx; // Transmitter range from Earth's center [m]

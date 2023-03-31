@@ -1,41 +1,30 @@
 <<<<<<<<<<<<<<<<<<<<<<<  Fixed Observation Description File  >>>>>>>>>>>>>>>>>>>>>>>
 ====================================== Receiver ====================================
 400                           ! Receiver Altitude [km]
-0    RX                       ! Antenna Gain [dB], Polarization(R,X,RX)
+0    RX                       ! Receiver Antenna Gain [dB], Polarization (R,X,RX)
 IDEAL                         ! Antenna Pattern Input (IDEAL, GAUSSIAN, USER_DEFINED)
 30   25   25   1              ! (GAUSSIAN) HPBW[deg], Sidelobe[dB], X-pol[dB], Res[deg]
 default_ant_pat_gnXX.csv      ! (USER_DEFINED) Antenna Pattern XX-pol File Name
 default_ant_pat_gnXY.csv      ! (USER_DEFINED) Antenna Pattern XY-pol File Name
 default_ant_pat_gnYX.csv      ! (USER_DEFINED) Antenna Pattern YX-pol File Name
 default_ant_pat_gnYY.csv      ! (USER_DEFINED) Antenna Pattern YY-pol File Name
-SSO                           ! (For retrieval only) Orbit type (ISS, SSO)
-90   0                        ! Receiver Elevation [deg], Azimuth [deg]
-0.005                         ! Coherent Integration Time [sec]
-1100                          ! Noise Temperature N0 [K]
-9                             ! Spatial Resolution Requirement [km]
+ISS                           ! (For retrieval only) Orbit type (ISS, SSO)
 ==================================== Transmitters ==================================
-2                             ! Number of Transmitters
+4                             ! Number of Transmitters
 ----------------------------------------- Tx 1 -------------------------------------
-255                           ! Transmitter Frequency [MHz]
-35786                           ! Transmitter Altitude [km]
-27    R                        ! Transmitter EIRP [dB], Polarization (R,L,X,Y)
-90   0                        ! Transmitter Elevation [deg], Azimuth [deg]
-25                            ! Bandwidth of channel [kHz]
+137                           ! Transmitter Frequency [MHz]
+750                           ! Transmitter Altitude [km]
+R                             ! Transmitter Polarization (R,L,X,Y)
 ----------------------------------------- Tx 2 -------------------------------------
-1575.42                           ! Transmitter Frequency [MHz]
-20180                           ! Transmitter Altitude [km]
-32    R                        ! Transmitter EIRP [dB], Polarization (R,L,X,Y)
-90   0                        ! Transmitter Elevation [deg], Azimuth [deg]
-4092                            ! Bandwidth of channel [kHz]
+255                           ! Transmitter Frequency [MHz]
+35786                         ! Transmitter Altitude [km]
+R                             ! Transmitter Polarization (R,L,X,Y)
 ----------------------------------------- Tx 3 -------------------------------------
 370                           ! Transmitter Frequency [MHz]
-35786                           ! Transmitter Altitude [km]
-37    R                        ! Transmitter EIRP [dB], Polarization (R,L,X,Y)
-90   0                        ! Transmitter Elevation [deg], Azimuth [deg]
-5000                            ! Bandwidth of channel [kHz]
+35786                         ! Transmitter Altitude [km]
+R                             ! Transmitter Polarization (R,L,X,Y)
 ----------------------------------------- Tx 4 -------------------------------------
-1575.42                           ! Transmitter Frequency [MHz]
-20180                           ! Transmitter Altitude [km]
-32    R                        ! Transmitter EIRP [dB], Polarization (R,L,X,Y)
-90   0                        ! Transmitter Elevation [deg], Azimuth [deg]
-4092                            ! Bandwidth of channel [kHz]
+1575.42                       ! Transmitter Frequency [MHz]
+20180                         ! Transmitter Altitude [km]
+R                             ! Transmitter Polarization (R,L,X,Y)
+

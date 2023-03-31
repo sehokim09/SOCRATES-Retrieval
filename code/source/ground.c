@@ -293,24 +293,17 @@ int SMP_POME_wet_case(double sur, double avg, double bott, double D, double delz
 	long iLayer, nLayer;
 
 	nLayer = (long) round(D/delz) + 1;
-	// check to see if avg is within limits -- if not then provide fix values
- //   if((avg > sur) || (avg < bott)){
- //       avg = sur*0.65 + bott*0.35;
-	//}
 
     // Solve for Lagrange multipliers
     dat = SMP_POME_L2solver_wet(sur, avg, bott);
 	dao1 = log(dat/(exp(dat*sur)-exp(dat*bott))) + 1;
-	//if(isnan(dao1) || isinf(dao1)){
-	//	dao1 = 1;
-	//}
+
     // Calculate soil moisture profile
     for(iLayer=0; iLayer<nLayer; iLayer++){
         profile[iLayer] = log(exp(dat*sur)-(dat*exp(1-dao1)*(iLayer*delz)/D))/dat;
 		if(isnan(profile[iLayer]) || isinf(profile[iLayer])){
 			res = POME_FAILURE;
 			return res;
-		//	printf("Wet: %le %le %le %lf %lf %lf %lf %lf %lf\n", sur, avg, bott, dat, dao1, delz, D, exp(dat*sur)-(dat*exp(1-dao1)*(iLayer*delz)/(D-0.05)), profile[iLayer]); //exit(1);
 		}
 	}
 	res = POME_WET;
@@ -326,25 +319,16 @@ int SMP_POME_dry_case(double sur, double avg, double bott, double D, double delz
 
 	nLayer = (long) round(D/delz) + 1;
 
-    // check to see if avg is within limits -- if not then provide fix values
-  //  if((avg < sur) || (avg > bott)){
-  //      avg = sur*0.65 + bott*0.35;
-//	}
-
     // Solve for Lagrange multipliers
     dat = SMP_POME_L2solver_dry(sur, avg, bott);    
 	dao1 = log(dat/(exp(dat*bott)-exp(dat*sur))) + 1;
-	//if(isnan(dao1) || isinf(dao1)){
-	//	dao1 = 1;
-	//}
+
     // Calculate soil moisture profile
     for(iLayer=0; iLayer<nLayer; iLayer++){
         profile[iLayer] = log(exp(dat*sur)+(dat*exp(1-dao1)*(iLayer*delz)/D))/dat;
 		if(isnan(profile[iLayer]) || isinf(profile[iLayer])){
 			res = POME_FAILURE;
 			return res;
-		//	printf("Dry: layer %ld = %le %le %le %lf %lf %lf %lf %le %lf\n", iLayer, sur, avg, bott, dat, dao1, delz, D, exp(dat*sur)+(dat*exp(1-dao1)*(iLayer*delz)/(D-0.05)), profile[iLayer]);
-			//exit(1);
 		}
 	}
 	res = POME_DRY;
@@ -371,7 +355,7 @@ int SMP_POME_run_case(double sur, double avg, double bott, double infl_val, doub
 
     low_sur = infl_val;
     upp_bott = infl_val;
-    //printf("%lf %lf %lf %lf %lf %lf %lf\n", sur, avg, bott, upp_avg, low_avg, upp_bott, low_sur);
+	
     if(sur <= avg && avg >= bott){
 		// case I
         res = SMP_POME_dry_case(sur, upp_avg, upp_bott, z_infl, delz, profile_upp);
@@ -405,9 +389,6 @@ int SMP_POME_run_case(double sur, double avg, double bott, double infl_val, doub
 	else{
 		res = POME_FAILURE;
 		return res;
-//		printf(">> Error in POME model - run case\n");
-//		printf(">> sur = %lf, bott = %lf, avg = %lf\n", sur, bott, avg);
-//		exit(1);
 	}
 
 	res = POME_DYNAMIC;
@@ -427,10 +408,6 @@ int SMP_POME_dynamic_case(double sur, double avg, double bott, double D, double 
 
 	infl_init = (fc - resid) / (sat - resid);
 
-//   if(avg > infl_init){
-// 	    infl_init = SimAnneal->ub[0];
-//		infl_init = 1;
-//	}
 	infl_min = infl_init;
 
 	// Convex ) shape
@@ -496,24 +473,18 @@ int SMP_POME_main(double sur, double bott, double avg)
 	// Apply POME model to estimate soil moisture profile
     if(sur < avg && avg < bott){
         // dry case
-		//printf("dry - %lf %lf %lf\n", sur, avg, bott);
         res = SMP_POME_dry_case(sur, avg, bott, D, delZ, MultiLayer->SMP);
 	}
     else if(sur > avg && avg > bott){
         // wet case
-		//printf("wet - %lf %lf %lf\n", sur, avg, bott);
         res = SMP_POME_wet_case(sur, avg, bott, D, delZ, MultiLayer->SMP);
 	}
     else if (((sur <= avg) && (avg >= bott)) || ((sur >= avg) && (avg <= bott))){
         // dynamic case
-		//printf("dyn - %le %le %le\n", sur, avg, bott);
         res = SMP_POME_dynamic_case(sur, avg, bott, D, delZ, MultiLayer->z_infl, Gnd->fc, Gnd->resid, Gnd->poro, MultiLayer->SMP);
 	}
     else{
 		res = POME_FAILURE;
-        //printf("Could not determine soil moisture profile please check input data\n");
-		//printf(">> sur = %le, bott = %le, avg = %le\n", sur, bott, avg);
-		//exit(1);
 	}
 	return res;
 }

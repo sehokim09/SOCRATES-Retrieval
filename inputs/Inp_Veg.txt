@@ -11,7 +11,7 @@ grass               ! Label
 *********************************************************************************************
 1                   ! Number of Scatterer Kinds
 ========================================== Kind 1 ===========================================
-L1                  ! Particle ID (L:Leaf, B:Branch, T:Truck, N:Needle, W:water)
+L1                  ! Particle ID (L:Leaf, B:Branch, T:Trunk, N:Needle, W:water)
 900                 ! Density [particles/m^3]
 0.2   0.01  0.0002  ! Dimensions [m,m,m] (L/W:Semi-major,Semi-minor,thick, B/T/N:rad,rad,len)
 0.5	            ! Volumetric Water Content

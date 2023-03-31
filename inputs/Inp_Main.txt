@@ -6,7 +6,7 @@
 20                                 ! Initial Inflection Depth [cm]
 =========================== USCRN =====================================
 station_in.txt                     ! USCRN Station List File Name
-2017  2017                         ! Starting Year, Ending Year
+2016  2016                         ! Starting Year, Ending Year
 1     12                           ! Starting Month, Ending Month
 ************************** Static Data ********************************
 TRUE                               ! Vegetation

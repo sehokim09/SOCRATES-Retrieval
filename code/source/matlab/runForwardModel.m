@@ -43,7 +43,7 @@ for iOrb = 1 : length(orbits)
     str = sprintf('%s                           ! (For retrieval only) Orbit type (ISS, SSO)\n', orbits{iOrb});
     overwriteLineInFile(dir_inp_fixed,11,str);
     % Run simulation
-    system('SMAT-retrieval f');
+    system('SOCRATES-Retrieval f');
 end
 
 end

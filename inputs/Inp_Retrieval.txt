@@ -1,9 +1,9 @@
 <<<<<<<<<<<<<<<<<<<<  Retrieval Description File  >>>>>>>>>>>>>>>>>>>>>
 XY                             ! Receive Polarization(R,L,X,Y,RL,RX,RY,LX,LY,XY)
 0.04                          ! Standard Deviation of Reflectivity Error Ratio
-168  72                         ! Measurement Period [hr], Time window [hr]
+168  12                         ! Measurement Period [hr], Time window [hr]
 b_parameters.txt      ! The b parameter input file name
 =========================== POME Model ================================
-100                   ! Total Depth [cm]
+200                   ! Total Depth [cm]
 10                    ! Layer Discretization [mm]
 20                    ! Initial Inflection Depth [cm]

@@ -19,15 +19,43 @@
 
 void Welcome(void)
 {
+	int retval;
+
 	printf("/************************************************************/\n");
 	printf("/*                                                          */\n");
 	printf("/*                 |  SOCRATES-retrieval  |                 */\n");
 	printf("/*                                                          */\n");
 	printf("/************************************************************/\n");
-	if(SimMode == FORWARD)
+	// Make an output directories if not exist
+	retval = mkdir("./results/", 0777);
+	if(retval != 0 && errno != EEXIST){
+		printf(">> mkdir fail: %s\n", "./results/");
+		exit(ERRCODE);            
+	}
+	if(SimMode == FORWARD){
 		printf(">> Simulation Mode: Forward\n");
-	else if(SimMode == INVERSE)
+		// Make an output directories if not exist
+		retval = mkdir(ForwardPath, 0777);
+		if(retval != 0 && errno != EEXIST){
+			printf(">> mkdir fail: %s\n", ForwardPath);
+			exit(ERRCODE);            
+		}
+		else{
+			printf(">> Output dir: %s\n", ForwardPath);
+		}
+	}
+	else if(SimMode == INVERSE){
 		printf(">> Simulation Mode: Inverse\n");
+		// Make an output directories if not exist
+		retval = mkdir(InversePath, 0777);
+		if(retval != 0 && errno != EEXIST){
+			printf(">> mkdir fail: %s\n", InversePath);
+			exit(ERRCODE);            
+		}
+		else{
+			printf(">> Output dir: %s\n", InversePath);
+		}
+	}
 	printf(">> Number of Input Soil Layers is %ld\n", NLayer);
 	printf(">> Ground Multi-layered Structure: POME model, # sublayers = %ld + %ld\n", MultiLayer->NSublayer_POME, MultiLayer->NSublayer_extend);
 	printf(">> Initiating Fixed Geometry Observation ...\n");
@@ -246,8 +274,6 @@ void InitFixedObs(void)
 		Fixed[ISoOp].ID = ISoOp;
 		Fixed[ISoOp].Freq = InputSoOp->F[ISoOp].Freq; // [Hz]
 		Fixed[ISoOp].Wavelength = LIGHTSPEED / Fixed[ISoOp].Freq;
-		Fixed[ISoOp].Bandwidth = InputSoOp->F[ISoOp].Bandwidth;
-		Fixed[ISoOp].EIRP_Tx = InputSoOp->F[ISoOp].EIRP_Tx; // [dB]
 		Fixed[ISoOp].polRx = InputSoOp->F[ISoOp].polRx; // Receive Antenna Polarization
 		Fixed[ISoOp].polTx = InputSoOp->F[ISoOp].polTx; // Transmit Antenna Polarization
 		Fixed[ISoOp].hpbw = InputSoOp->F[ISoOp].hpbw; // Half-power beanwidth of the receive antenna pattern [deg]
@@ -257,18 +283,9 @@ void InitFixedObs(void)
 		Fixed[ISoOp].G_Rx = InputSoOp->F[ISoOp].G_Rx; // [dB]
 		Fixed[ISoOp].rTx = InputSoOp->F[ISoOp].rTx; // Transmitter range from Earth's center [m]
 		Fixed[ISoOp].hTx = InputSoOp->F[ISoOp].hTx; // Transmitter altitude [m]
-		Fixed[ISoOp].elTx = InputSoOp->F[ISoOp].elTx; // Tx Elevation = 90 - Incidence angle [rad]
-		Fixed[ISoOp].thTx = InputSoOp->F[ISoOp].thTx; // Tx Incidence angle [rad]
-		Fixed[ISoOp].phTx = InputSoOp->F[ISoOp].phTx; // Tx Azimuth angle [rad]
+		Fixed[ISoOp].phTx = 0; // Tx Azimuth angle [rad]
 		Fixed[ISoOp].hRx = InputSoOp->F[ISoOp].hRx; // Receiver altitude [m]
-		Fixed[ISoOp].elRx = InputSoOp->F[ISoOp].elRx; // Rx Elevation = 90 - Incidence angle [rad]
-		Fixed[ISoOp].thRx = InputSoOp->F[ISoOp].thRx; // Rx Antenna looking angle (angle of incidence) [rad]
-		Fixed[ISoOp].phRx = InputSoOp->F[ISoOp].phRx; // Rx Azimuth angle of receiver position [rad]
-		Fixed[ISoOp].t_coh = InputSoOp->F[ISoOp].t_coh; // Coherent Integration Time [sec]
-		Fixed[ISoOp].Tn = InputSoOp->F[ISoOp].Tn; // Noise Temperature [K]
-		Fixed[ISoOp].sres_req = InputSoOp->F[ISoOp].sres_req; // Spatial Resolution Requirement [m]
-		Fixed[ISoOp].t_inc = Fixed[ISoOp].sres_req / (sqrt(EarthMu/(Fixed[ISoOp].hRx + EarthRad)) - EarthRad*EarthW);
-		Fixed[ISoOp].N_inc = floor(Fixed[ISoOp].t_inc / Fixed[ISoOp].t_coh);
+		Fixed[ISoOp].phRx = 0; // Rx Azimuth angle of receiver position [rad]
 
 		Fixed[ISoOp].AntTag = InputSoOp->F[ISoOp].AntTag;
 		if(Fixed[ISoOp].AntTag == USER_DEFINED){
@@ -420,7 +437,7 @@ void LoadFixed(void)
     char junk[120], newline, response[120];
 	char AntFileName[4][30], orbitName[5];
 	long ISoOp;
-	double hRx, G_Rx, elRx, phRx, thRx, t_coh, Tn, sres_req, hpbw, SLL, XPL, antPatRes;
+	double hRx, G_Rx, hpbw, SLL, XPL, antPatRes;
 	long AntTag;
 
 	/* .. Read from file Inp_Fixed.txt */
@@ -451,21 +468,8 @@ void LoadFixed(void)
 	fscanf(infile,"%s %[^\n] %[\n]",AntFileName[3],junk,&newline);
 	// (For retrieval only) Orbit type
 	fscanf(infile,"%s %[^\n] %[\n]", orbitName,junk,&newline);
-	// Receiver Elevation [deg], Azimuth [deg]
-	fscanf(infile, "%lf %lf %[^\n] %[\n]", &elRx, &phRx, junk, &newline);
-	elRx *= D2R;
-	phRx *= D2R;
-	thRx = HalfPi - elRx;
-	// Coherent Integration Time [sec]
-	fscanf(infile, "%lf %[^\n] %[\n]", &t_coh, junk, &newline);
-	// Noise Temperature [K]
-	fscanf(infile, "%lf %[^\n] %[\n]", &Tn, junk, &newline);
-	// Spatial Resolution Requirement [m]
-	fscanf(infile, "%lf %[^\n] %[\n]", &sres_req, junk, &newline);
-	sres_req *= 1E3; // [km] -> [m]
 
 	fscanf(infile,"%s %[^\n] %[\n]",response,junk,&newline);
-
 	// Number of Transmitters
 	fscanf(infile, "%ld %[^\n] %[\n]", &NSoOp, junk, &newline);
 
@@ -485,16 +489,8 @@ void LoadFixed(void)
 		InputSoOp->F[ISoOp].hTx *= 1E3; // [km] to [m]
 		// Transmitter Range to Earth Center [m]
 		InputSoOp->F[ISoOp].rTx = InputSoOp->F[ISoOp].hTx + EarthRad;
-		// Transmitter EIRP [dB], Polarization (R,L,X,Y)
-		fscanf(infile, "%lf %c %[^\n] %[\n]", &InputSoOp->F[ISoOp].EIRP_Tx, &InputSoOp->F[ISoOp].polTx, junk, &newline);
-		// Transmitter Elevation [deg], Azimuth [deg]
-		fscanf(infile, "%lf %lf %[^\n] %[\n]", &InputSoOp->F[ISoOp].elTx, &InputSoOp->F->phTx, junk, &newline);
-		InputSoOp->F[ISoOp].elTx *= D2R;
-		InputSoOp->F[ISoOp].phTx *= D2R;
-		InputSoOp->F[ISoOp].thTx = HalfPi - InputSoOp->F[ISoOp].elTx; 
-		// Bandwidth of Channel
-		fscanf(infile,"%lf %[^\n] %[\n]",&InputSoOp->F[ISoOp].Bandwidth,junk,&newline); // read in [kHz]
-		InputSoOp->F[ISoOp].Bandwidth *= 1E3; // [kHz] to [Hz]
+		// Transmitter Polarization (R,L,X,Y)
+		fscanf(infile, "%c %[^\n] %[\n]", &InputSoOp->F[ISoOp].polTx, junk, &newline);
 	}
 
 	for(ISoOp=0; ISoOp<NSoOp; ISoOp++){
@@ -516,16 +512,6 @@ void LoadFixed(void)
 		strcpy(InputSoOp->F[ISoOp].AntFileName[3], AntFileName[3]);
 		// (For retrieval only) Orbit Type
 		strcpy(InputSoOp->F[ISoOp].orbitName, orbitName);
-		// Receiver Elevation [deg], Azimuth [deg]
-		InputSoOp->F[ISoOp].elRx = elRx;
-		InputSoOp->F[ISoOp].phRx = phRx;
-		InputSoOp->F[ISoOp].thRx = thRx;
-		// Coherent Integration Time [sec]
-		InputSoOp->F[ISoOp].t_coh = t_coh;
-		// Noise Temperature [K]
-		InputSoOp->F[ISoOp].Tn = Tn;
-		// Spatial Resolution Requirement [m]
-		InputSoOp->F[ISoOp].sres_req = sres_req;
 	}
 }
 
@@ -616,7 +602,7 @@ void LoadMain(void)
 	fclose(infile);
 }
 
-void InitSMAT_ret(int argc,char **argv)
+void InitSOCRATES_Ret(int argc,char **argv)
 {
 	int iLayer;
 	/* .. Set directories .. */
@@ -624,7 +610,7 @@ void InitSMAT_ret(int argc,char **argv)
 	sprintf(ForwardPath, "./results/forward/");
 	sprintf(InversePath, "./results/inverse/");
 	strcpy(AntPath, InPath);
-
+        
 	/* .. Set simulation Mode .. */
 	if (argc > 1){
 		if(!strcmp(argv[1], "f")){
@@ -643,7 +629,7 @@ void InitSMAT_ret(int argc,char **argv)
 		printf(">> Error: Arguments missing. Specify your simulation mode.\n");
 		exit(1);
 	}
-	
+
 	/* .. Initialize Math Constants .. */
 	InitConstants();
 

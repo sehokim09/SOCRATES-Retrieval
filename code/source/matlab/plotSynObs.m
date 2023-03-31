@@ -29,11 +29,14 @@ dir_in = './inputs/';
 dir_processed = './data/processed/';
 dir_forward = './results/forward/';
 dir_figures = './figures/forward/';
-
+if ~exist(dir_figures, 'dir')
+    mkdir(dir_figures);
+end
 % Read the list of selected stations
 temp = readlines(strcat(dir_in, 'station_in.txt'),"EmptyLineRule","skip");
 nStation = str2double(temp(1));
 station_in = temp(2:end);
+station_in = station_in(1:nStation);
 station_name_space = strrep(station_in,'_', ' ');
 
 % Read data of the selected stations from the station table

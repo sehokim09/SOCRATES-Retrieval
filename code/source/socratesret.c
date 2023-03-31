@@ -7,7 +7,6 @@
 /***************************************************************************/
 /*                                                                         */
 /*   Written by Seho Kim @ Purdue University                               */
-/*   Integrating "SCoBi" by M.Kurum @ Mississippi State University         */
 /*                                                                         */
 /***************************************************************************/
  /* Copyright (C) 2023 Seho Kim
@@ -40,7 +39,7 @@ int main(int argc,char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
 	
 	/* .. Initialize Simulator .. */
-	InitSMAT_ret(argc, argv);
+	InitSOCRATES_Ret(argc, argv);
 	if(taskid == MASTER)
 		Welcome();
 

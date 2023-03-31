@@ -22,7 +22,7 @@ ifeq ($(AUTOPLATFORM),Failed)
 	PLATFORM = __MSYS__
 endif
 
-NAME = SOCRATES-retrieval
+NAME = SOCRATES-Retrieval
 
 # Basic directories
 PROJDIR = ./
@@ -31,11 +31,12 @@ OUT = $(PROJDIR)
 OBJ = $(CODE)object/
 INC = $(CODE)include/
 SRC = $(CODE)source/
+42KIT = $(SRC)42/
 
 ifeq ($(PLATFORM),__APPLE__)
 	# Mac Macros
 	CINC = -I /usr/include
-	LIBS = -framework System -framework Carbon -framework OpenGL -framework GLUT 
+	LIBS = -framework System -lnetcdf
 	LFLAGS = -bind_at_load
 	# ARCHFLAG = -arch i386
 	# ARCHFLAG = -arch x86_64
@@ -56,14 +57,14 @@ endif
 
 ifeq ($(PLATFORM),__MSYS__)
 	CINC =
-	LIBS =  -lws2_32
+	LIBS =  -lws2_32 -lnetcdf
 	LFLAGS =
 	ARCHFLAG =
 	EXENAME = $(NAME).exe
 	CC = mpicc
 endif
 
-SOOPOBJ = $(OBJ)socratesret.o $(OBJ)init.o $(OBJ)geometry.o $(OBJ)ground.o $(OBJ)product.o $(OBJ)antenna.o $(OBJ)util.o
+SOOPOBJ = $(OBJ)socratesret.o $(OBJ)init.o $(OBJ)geometry.o $(OBJ)ground.o $(OBJ)product.o $(OBJ)antenna.o $(OBJ)util.o $(OBJ)42kit.o
 
 RETOBJ = $(OBJ)retrieval.o
 
@@ -79,27 +80,29 @@ SOCRATES-retrieval : $(SOOPOBJ) $(RETOBJ)
 $(OBJ)socratesret.o      : $(SRC)socratesret.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)socratesret.c -o $(OBJ)socratesret.o
 
-$(OBJ)init.o             : $(SRC)init.c $(INC)smatret.h
+$(OBJ)init.o             : $(SRC)init.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)init.c -o $(OBJ)init.o
 
-$(OBJ)geometry.o         : $(SRC)geometry.c $(INC)smatret.h
+$(OBJ)geometry.o         : $(SRC)geometry.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)geometry.c -o $(OBJ)geometry.o
 
-$(OBJ)ground.o           : $(SRC)ground.c $(INC)smatret.h
+$(OBJ)ground.o           : $(SRC)ground.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)ground.c -o $(OBJ)ground.o
 
-$(OBJ)product.o          : $(SRC)product.c $(INC)smatret.h
+$(OBJ)product.o          : $(SRC)product.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)product.c -o $(OBJ)product.o
 
-$(OBJ)antenna.o          : $(SRC)antenna.c $(INC)smatret.h
+$(OBJ)antenna.o          : $(SRC)antenna.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)antenna.c -o $(OBJ)antenna.o
 
-$(OBJ)util.o             : $(SRC)util.c $(INC)util.h $(INC)smatret.h
+$(OBJ)util.o             : $(SRC)util.c $(INC)util.h $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)util.c -o $(OBJ)util.o
 
-$(OBJ)retrieval.o        : $(SRC)retrieval.c $(INC)smatret.h
+$(OBJ)retrieval.o        : $(SRC)retrieval.c $(INC)socratesret.h
 	$(CC) $(CFLAGS) -c $(SRC)retrieval.c -o $(OBJ)retrieval.o
  
+$(OBJ)42kit.o            : $(42KIT)42kit.c $(INC)socratesret.h
+	$(CC) $(CFLAGS) -c $(42KIT)42kit.c -o $(OBJ)42kit.o
 ########################  Miscellaneous Rules  ############################
 clean :
 ifeq ($(PLATFORM),_WIN32)

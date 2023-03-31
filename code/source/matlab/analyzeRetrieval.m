@@ -1,5 +1,5 @@
-function plotRetrieval(years, months, orbits, freq, polRx, stddev, period, window)
-% function plotRetrieval
+function analyzeRetrieval(years, months, orbits, freq, polRx, stddev, period, window)
+% function analyzeRetrieval
 %
 %   Calculates, plots, and saves error statistics of retrieved data by
 %   calling calcStatAndPlot in loops.

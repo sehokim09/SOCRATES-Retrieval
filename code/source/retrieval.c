@@ -1844,7 +1844,7 @@ void ObsFixedNetCDF(void)
     printf(">> Start generating synthetic observations...\n");
 	printf(">> #SoOp = %ld, #Pol = %ld\n", NSoOp, NPol);
 	for(iYear=Nc->startYear; iYear<Nc->endYear+1; iYear++){
-		printf(">> Year %d\n", iYear);
+		printf(">> Year %ld\n", iYear);
 		fscanf(stationFile,"%ld %[\n]",&nStation, &newline);
 		for(iStation=0; iStation<nStation; iStation++){
 			// Read station name

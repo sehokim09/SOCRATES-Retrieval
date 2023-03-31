@@ -31,7 +31,10 @@ dir_in = './inputs/';
 dir_forward = './results/forward/';
 dir_processed = './data/processed/';
 dir_out = './results/';
-dir_figure = './figures/';
+dir_figures = './figures/';
+if ~exist(dir_figures, 'dir')
+    mkdir(dir_figures);
+end
 
 %% PARAMETERS
 trainDataRatio = 0.1;
@@ -166,7 +169,7 @@ if ~exist(strcat(dir_out, 'b_parameters.mat'), "file")
 end
 
 %% PLOT
-if ~exist(strcat(dir_figure, 'b_linearRegression.png'), "file")
+if ~exist(strcat(dir_figures, 'b_linearRegression.png'), "file")
     load(strcat(dir_out, 'b_parameters.mat'));
     dataColor = {'r.', 'g.', 'b.', 'c.', 'm.'};  
     lineColor = {'r', 'g', 'b', 'c', 'm'};
@@ -231,7 +234,7 @@ if ~exist(strcat(dir_figure, 'b_linearRegression.png'), "file")
     
     xlabel(ht, 'Vegetation Water Content [kg/m^{3}]', 'FontSize', 11); ylabel(ht, 'Vegetation Optical Depth', 'FontSize', 11);
     title(ht, 'Linear Regression Relation Between VOD & VWC');
-    print(hf, strcat(dir_figure, 'b_linearRegresson'), '-dpng');
+    print(hf, strcat(dir_figures, 'b_linearRegression'), '-dpng');
 end
 
 end
