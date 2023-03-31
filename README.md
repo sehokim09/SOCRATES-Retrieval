@@ -12,12 +12,13 @@ Use SOCRATES for more functionality such as generic SoOp coverage analysis and t
 
 ## Installation
 
-SOCRATES-Retrieval supports Linux.
+SOCRATES-Retrieval supports Linux. See the manual, "SOCRATES-Retrieval\_user\_manual.pdf" in the ./doc folder for details.
 
 To install from the Git repository:
 
   1. Clone the code from Git: `git clone git@github.itap.purdue.edu:RadioNavigationLab/SOCRATES-Retrieval.git`.
-  2. Open a terminal on the top-level directory and run `make` to compile the simulator as a default mode. See the manual, "SOCRATES-Retrieval\_user\_manual.pdf" in the ./doc folder for details.
+  2. Open a terminal on the ./code directory and run `make` to compile the simulator as a default mode.
+  3. An executable file "SOCRATES-Retrieval" should be created in the top directory.
 
 ## Getting Started
 See the manual, "SOCRATES-Retrieval\_user\_manual.pdf" in the ./doc folder.
