@@ -1748,8 +1748,8 @@ void compute_PhTh_average(struct VegModelType *V, double complex *afun)
 void compute_avfscatamp(double *tin, double *pin, struct VegModelType *V, double complex *avFScatAmp)
 {
 	double complex temp[4];
-	size_t nTh = sizeof(tin) / sizeof(tin[0]);
-	size_t nPh = sizeof(pin) / sizeof(pin[0]);
+	size_t nTh = 1;
+	size_t nPh = 1;
 	int iTh, iPh;
 
 	for(iTh=0; iTh<nTh; iTh++){
