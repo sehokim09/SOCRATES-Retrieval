@@ -29,7 +29,7 @@
 
 clear all; close all;
 addpath source/matlab/
-dir_top = '../';
+dir_top = '/';
 
 % Create necessary directories
 dirs = setDirectories(dir_top);
@@ -90,7 +90,7 @@ period = 168;
 % Observation time window T in hours
 window = 12;
 % Number of processors. Adjust this value according to your system.
-np = 24;
+np = 8;
 
 % Run Monte Carlo simulations for different SoOp-R parameters
 runInverseModel(dirs, np, years, months, orbits, freq, polRx, stddev, period, window)

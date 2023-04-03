@@ -1592,7 +1592,7 @@ void readNcUSCRN(long year, char *stationName)
 	Nc->soopDim = NSoOp;
 
 	// Input file name
-	sprintf(fullpath, "./data/processed/%ld/USCRN_hourly_%ldM%ldM%ld_%s_%s.nc", year, year, Nc->startMonth, Nc->endMonth, Fixed[0].orbitName, stationName);
+	sprintf(fullpath, "../results/data-processed/%ld/USCRN_hourly_%ldM%ldM%ld_%s_%s.nc", year, year, Nc->startMonth, Nc->endMonth, Fixed[0].orbitName, stationName);
 	
 	/* Open the file. NC_NOWRITE tells netCDF we want read-only access
 	* to the file.*/

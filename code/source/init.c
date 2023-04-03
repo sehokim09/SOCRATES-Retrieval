@@ -606,9 +606,9 @@ void InitSOCRATES_Ret(int argc,char **argv)
 {
 	int iLayer;
 	/* .. Set directories .. */
-	sprintf(InPath, "./inputs/");
-	sprintf(ForwardPath, "./results/forward/");
-	sprintf(InversePath, "./results/inverse/");
+	sprintf(InPath, "../code/inputs/");
+	sprintf(ForwardPath, "../results/forward/");
+	sprintf(InversePath, "../results/inverse/");
 	strcpy(AntPath, InPath);
         
 	/* .. Set simulation Mode .. */

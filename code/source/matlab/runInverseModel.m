@@ -118,7 +118,7 @@ for iFreq = 1 :nFreq
 
                                 % Run simulation
                                 fprintf('run SOCRATES-Retrieval.\n');
-                                status = system(['cd ', dirs.exe, '; mpirun -np ', num2str(np), ' SOCRATES-Retrieval i ', folder_out]);
+                                status = system(['mpirun --allow-run-as-root -np ', num2str(np), ' ', dirs.exe, 'SOCRATES-Retrieval i ', folder_out]);
                                 if status == 0
                                     fprintf('%s complete.\n', fullpath);
                                 else

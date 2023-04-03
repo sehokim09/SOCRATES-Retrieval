@@ -26,7 +26,7 @@ NAME = SOCRATES-Retrieval
 
 # Basic directories
 PROJDIR = ../
-OUT = ../
+OUT = $(PROJDIR)results/
 CODE = $(PROJDIR)code/
 OBJ = $(CODE)object/
 INC = $(CODE)include/
@@ -110,7 +110,7 @@ ifeq ($(PLATFORM),_WIN32)
 else ifeq ($(PLATFORM),_WIN64)
 	del .\obj\*.o .\$(OUT)$(EXENAME)
 else
-	rm -f $(OBJ)*.o .\$(OUT)$(EXENAME)
+	rm -f $(OBJ)*.o $(OUT)$(EXENAME)
 endif
 
 
