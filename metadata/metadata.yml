@@ -1,14 +1,13 @@
 metadata_version: 1
-name: SOCRATES-Retrieval
+name: SoOp-R Retrieval Sensitivity Analysis for Subsurface Soil Moisture and Vegetation
+  Water Content Using SOCRATES-Retrieval
 description: |-
-  SoOp Constellation Remote sensing Analysis Tool for Earth Science - Retrieval module
+  SOCRATES-Retrieval is a retrieval module of SOCRATES (Signals of Opportunity Constellation and Remote sensing Analysis Tool for Earth Science) to simulate the retrieval of subsurface soil moisture (RZSM) and vegetation water content (VWC) using synthetic observations of multi-frequency/polarimetric signals of opportunity (SoOp). This simulation tool integrates the SCoBi model and the Principle of Maximum Entropy (POME) model to provide a bistatic SoOp-R environment and resulting measurements in a comprehensive manner. The current release of SOCRATES-Retrieval boasts the following capabilities:
 
-  SOCRATES-Retrieval is a retrieval module of SOCRATES to simulate the retrieval of subsurface soil moisture (RZSM) and vegetation water content (VWC) using synthetic observations of multi-frequency/polarimetric signals of opportunity (SoOp). This simulation tool integrates the SCoBi model and the Principle of Maximum Entropy (POME) model to provide a bistatic SoOp-R environment and resulting measurements in a comprehensive manner. The current release of SOCRATES-Retrieval boasts the following capabilities:
-
-  Soil moisture profile and VWC retrieval using multi-frequency/polarimetric SoOp.
-  Sensitivity analysis of retrieval accuracy to SoOp system parameters.
-  Antenna property realizations including gain pattern.
-  Geophysical data realizations including soil moisture and vegetation.
+    - Soil moisutre profile and VWC retrieval using multi-frequency/polarimetric SoOp.
+    - Sensitivity analysis of retrieval accuracy to SoOp system parameters.
+    - Antenna property realizations including gain pattern.
+    - Geophysical data realizations including soil moisture and vegetation.
 
   Use SOCRATES for more functionality such as generic SoOp coverage analysis and trade study of SoOp constellation design.
 tags:

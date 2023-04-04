@@ -1,7 +1,7 @@
-# SOCRATES-Retrieval
-SoOp Constellation Remote sensing Analysis Tool for Earth Science - Retrieval module
+# SoOp-R Retrieval Sensitivity Analysis for Subsurface Soil Moisture and Vegetation Water Content Using SOCRATES-Retrieval
 
-SOCRATES-Retrieval is a retrieval module of SOCRATES to simulate the retrieval of subsurface soil moisture (RZSM) and vegetation water content (VWC) using synthetic observations of multi-frequency/polarimetric signals of opportunity (SoOp). This simulation tool integrates the SCoBi model and the Principle of Maximum Entropy (POME) model to provide a bistatic SoOp-R environment and resulting measurements in a comprehensive manner. The current release of SOCRATES-Retrieval boasts the following capabilities:
+## Overview
+SOCRATES-Retrieval is a retrieval module of SOCRATES (Signals of Opportunity Constellation and Remote sensing Analysis Tool for Earth Science) to simulate the retrieval of subsurface soil moisture (RZSM) and vegetation water content (VWC) using synthetic observations of multi-frequency/polarimetric signals of opportunity (SoOp). This simulation tool integrates the SCoBi model and the Principle of Maximum Entropy (POME) model to provide a bistatic SoOp-R environment and resulting measurements in a comprehensive manner. The current release of SOCRATES-Retrieval boasts the following capabilities:
 
   - Soil moisutre profile and VWC retrieval using multi-frequency/polarimetric SoOp.
   - Sensitivity analysis of retrieval accuracy to SoOp system parameters.
