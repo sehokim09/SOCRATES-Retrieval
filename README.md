@@ -31,3 +31,4 @@ See the manual, "SOCRATES-Retrieval\_user\_manual.pdf" in the ./doc folder.
 
 Seho Kim, James L. Garrison, and Mehmet Kurum, “Retrieval of Subsurface Soil Moisture and Vegetation Water Content from Multi-frequency SoOp-Reflectometry: Sensitivity Analysis,” IEEE Transactions of Geoscience and Remote Sensing, DOI: https://doi.org/10.36227/techrxiv.22114433.v1, Manuscript submitted.
 
+Seho Kim, James L. Garrison, and Mehmet Kurum, "SoOp-R Retrieval Sensitivity Analysis for Subsurface Soil Moisture and Vegetation Water Content Using SOCRATES-Retrieval" [Source Code], Code Ocean, DOI:https://doi.org/10.24433/CO.5405959.v1

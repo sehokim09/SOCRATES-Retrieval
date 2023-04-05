@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 
-#ifndef __SMATRET_H__
-#define __SMATRET_H__
+#ifndef __SOCRATESRET_H__
+#define __SOCRATESRET_H__
 
 /* Disable extern keyword to declare globals */
 #ifdef DECLARE_GLOBALS
@@ -140,4 +140,4 @@ double signum(double x);
 
 /////////////////////////////////////////////
 
-#endif /* __SMATRET_H__ */
+#endif /* __SOCRATESRET_H__ */
